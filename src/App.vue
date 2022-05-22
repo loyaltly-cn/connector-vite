@@ -26,5 +26,8 @@ import Step from './components/step.vue'
   margin-top: 5%;
 }
 
+.select{
+  width: 100px;
+}
 
 </style>

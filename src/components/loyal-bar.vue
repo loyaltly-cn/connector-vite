@@ -9,22 +9,13 @@
       <template #left>
         <var-image src="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/logo.png" />
       </template>
-
       <template #right>
-        <var-space  justify="space-around" :size="[0,50]">
+        <var-space>
           <var-icon @click="toggleTheme()" :name="obj.icon" size="30" />
-          <div @mouseover="show=true">
-            <var-icon name="translate" size="30"/>
-            <var-icon name="menu-down" />
-            <var-menu offset-x="-60" offset-y="20" v-model:show="show">
-              <template #menu>
-                <div>
-                  <var-button @click="language()" type="info">中 &nbsp;&nbsp;&nbsp;&nbsp;文</var-button>
-                  <var-button  @click="language()">English</var-button>
-                </div>
-              </template>
-            </var-menu>
-          </div>
+          <var-select :line="false" :hint="false" placeholder="中文" offset-y="40" style="width:80px" v-model="currentLanguage">
+            <var-option label="中文" />
+            <var-option label="English" />
+          </var-select>
         </var-space>
       </template>
     </var-app-bar>
@@ -46,7 +37,8 @@ export default {
         textColor:'#000000',
         icon:'white-balance-sunny',
       },
-      show:false
+      show:false,
+      currentLanguage:'中文'
     }
   },
   created() {
