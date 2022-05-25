@@ -5,7 +5,7 @@ import commit from "./components/commit.vue";
 const routes =[
     {
         path:'/',
-        rewrite:'/show'
+        redirect:'/show'
     },
     {
         path: '/show',

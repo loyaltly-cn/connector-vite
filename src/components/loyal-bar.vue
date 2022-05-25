@@ -3,7 +3,7 @@
     <var-app-bar title-position="center" :color="obj.color" :text-color="obj.textColor">
 
       <template #default>
-        <p class="specification" @click="preview()">规格参数</p>
+        <p class="specification" @click="preview()">{{ text.title }}</p>
       </template>
 
       <template #left>
@@ -12,7 +12,7 @@
       <template #right>
         <var-space>
           <var-icon @click="toggleTheme()" :name="obj.icon" size="30" />
-          <var-select :line="false" :hint="false" placeholder="中文" offset-y="40" style="width:80px" v-model="currentLanguage">
+          <var-select @change="switchLanguage()" :line="false" :hint="false" placeholder="中文" offset-y="40" style="width:80px" v-model="select_language">
             <var-option label="中文" />
             <var-option label="English" />
           </var-select>
@@ -27,6 +27,9 @@
 import {ImagePreview} from "@varlet/ui";
 import dark from '@varlet/ui/es/themes/dark'
 import { StyleProvider } from '@varlet/ui'
+import {global} from "../global";
+import {en, zn} from "../language";
+
 export default {
   name: "loyal-bar",
   data(){
@@ -38,18 +41,38 @@ export default {
         icon:'white-balance-sunny',
       },
       show:false,
-      currentLanguage:'中文'
+      select_language:'中文',
+      text:null
     }
   },
-  created() {
-    let theme = localStorage.getItem('theme')
-    if (!theme){
-      this.toggleTheme()
-    }
+  async created() {
+    this.theme_init()
+    this.language_init()
+    this.parseUrl()
   },
   methods:{
-    language(){
-
+    parseUrl(){
+      let url = location.href
+      if (url.slice(-2) ==='en'){
+        this.select_language = 'English'
+        this.switchLanguage()
+      }
+   },
+    language_init(){
+      let language = localStorage.getItem('language')
+      if (language){
+        this.select_language = 'English'
+        global.currentLanguage = en
+      }else {
+        global.currentLanguage = zn
+      }
+      this.text = global.currentLanguage
+    },
+    theme_init(){
+      let theme = localStorage.getItem('theme')
+      if (!theme){
+        this.toggleTheme()
+      }
     },
     preview(){
       ImagePreview('https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/specification.jpg')
@@ -69,6 +92,20 @@ export default {
         localStorage.removeItem('theme')
       }
       StyleProvider(this.currentTheme)
+    },
+    switchLanguage(){
+      if (this.select_language === '中文'){
+        global.currentLanguage = zn
+        localStorage.removeItem('language')
+        console.log('zn')
+      }else if (this.select_language === 'English'){
+        console.log('en')
+        global.currentLanguage = en
+        localStorage.setItem('language','en')
+      }
+      this.text = global.currentLanguage
+      console.log(global.currentLanguage)
+      // this.$router.push(this.$judgeRouter(global.currentRouter))
     }
   }
 }

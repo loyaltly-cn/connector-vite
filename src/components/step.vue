@@ -1,10 +1,12 @@
 <template>
-  <var-steps :active="active" direction="vertical" @click-step="step">
-    <var-step>商品选购</var-step>
-    <var-step>购物车</var-step>
-    <var-step>提交</var-step>
-  </var-steps>
-  <var-button @click="jmp(++active)" type="info">下一步</var-button>
+  <var-space direction="column">
+    <var-steps :active="active" direction="vertical" @click-step="step">
+      <var-step>{{ text.step.select }}</var-step>
+      <var-step>{{ text.step.shopping }}</var-step>
+      <var-step>{{ text.step.commit }}</var-step>
+    </var-steps>
+    <var-button @click="jmp(++active)" type="info">{{ text.step.next }}</var-button>
+  </var-space>
 </template>
 
 <script>
@@ -12,12 +14,24 @@ import {ref} from "vue";
 import {Snackbar} from "@varlet/ui";
 import {global} from "../global";
 import {Email} from "../smtp"
+import {zn as text} from "../language";
 export default {
   name: "step",
   data(){
     return{
-      active:ref(0)
+      active:ref(0),
+      current_language:'',
+      text:{}
     }
+  },
+  created() {
+    this.text = global.currentLanguage
+    setInterval(()=>{
+      if (global.currentLanguage.language !== this.current_language){
+       this.current_language = global.currentLanguage.language
+        this.text = global.currentLanguage
+      }
+    },100)
   },
   methods:{
     step(index){
@@ -25,7 +39,7 @@ export default {
         this.jmp(index)
         this.active = index
       }else {
-        Snackbar.warning('请点击下一步');
+        Snackbar.warning(global.currentLanguage.hint.step_next);
       }
     },
     jmp(index){
@@ -38,7 +52,8 @@ export default {
             this.$router.push('/shopping')
           }else {
             this.active--
-            Snackbar.warning('请选择商品');
+            // console.log(global.currentLanguage.hint.select_product)
+            Snackbar.warning(global.currentLanguage.hint.select_product);
           }
           break;
         case 2:
@@ -48,13 +63,13 @@ export default {
           if (global.phone!==null){
             this.commit()
           }else {
-            Snackbar.warning('请输入手机号');
+            Snackbar.warning(global.currentLanguage.hint.phone);
           }
           break;
         default:break
       }
     },
-    commit(){
+    async commit(){
       let body = []
       global.list.forEach((data)=>{
         let product = {
@@ -66,28 +81,32 @@ export default {
         body.push(product)
       })
 
-      let order = {
-        buyers:{
-          phone:'+'+global.code+global.phone,
-          email:global.email
-        },
-        products:body
+      body.buyer = {
+        phone:'+'+global.code+global.phone,
+        email:global.email
       }
-      Email.send({
-        Host : "smtp.elasticemail.com",
-        Username : "loyaltly.cn@gmail.com",
-        Password : "9A464BB5FF70F00C31FC127936826B62A27F",
-        To : '1464808104@qq.com',
-        From : "loyaltly.cn@gmail.com",
-        Subject : "水密接插件订单",
-        Body : order
-      }).then(
-          void this.over()
-      );
+
+      let res = await this.$http({
+        url:'orders',
+        method:'post',
+        data:body
+      })
+
+      // Email.send({
+      //   Host : "smtp.elasticemail.com",
+      //   Username : "loyaltly.cn@gmail.com",
+      //   Password : "9A464BB5FF70F00C31FC127936826B62A27F",
+      //   To : '1464808104@qq.com',
+      //   From : "loyaltly.cn@gmail.com",
+      //   Subject : "水密接插件订单",
+      //   Body : body
+      // }).then(
+      //     void this.over()
+      // );
     },
     over(){
       this.active = 0
-      Snackbar.success('提交成功 请等待我们与您联系')
+      Snackbar.success(global.currentLanguage.commit.over)
       this.$router.push('/show')
     }
   }

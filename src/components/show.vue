@@ -1,34 +1,38 @@
 <template>
-  <var-space justify="space-around">
-    <var-sticky offset-top="100">
-      <var-tabs
-          class="tabs-example-vertical"
-          elevation
-          layout-direction="vertical"
-          v-model:active="active"
-      >
-        <var-tab @click="showAll()">所有产品</var-tab>
-        <var-tab @click="change(item)" v-for="(item,index) in spcList">{{item.name}}</var-tab>
-      </var-tabs>
-    </var-sticky>
+  <var-col span="2" offset="2">
+    <var-tabs
+        class="tabs-example-vertical"
+        elevation
+        layout-direction="vertical"
+        v-model:active="active"
+    >
+      <var-space >
+        <var-tab @click="showAll()" name="information">{{text.all_product}}</var-tab>
+        <var-tab v-if="text.language === '中文'" @click="change(item)" v-for="(item,index) in spcList">{{item.name}}</var-tab>
+        <var-tab v-else-if="text.language === 'English'" @click="change(item)" v-for="(item,index) in spcList">{{item.en}}</var-tab>
+      </var-space>
 
-    <var-space direction="column" class="cell">
-      <var-cell v-for="(item,index) in cellList" :border="true">
+    </var-tabs>
+  </var-col>
+  <var-col span="18">
+    <var-space direction="column" class="cell" justify="end">
+      <var-cell v-for="(item,index) in cellList" :border="true" >
         <template #default>
           <var-space>
             <var-image @click="preview(item.url)" fit="none" :src="item.url" />
           </var-space>
         </template>
         <template #desc>
-          <p>{{item.name}}</p>
+          <p v-if="text.language === '中文'">{{item.name}}</p>
+          <p v-else-if="text.language === 'English'">{{item.en}}</p>
         </template>
         <template #extra>
           <var-icon v-ripple="{ color: '#2979ff' }" @click="add(item)" name="plus-circle-outline" :size="30"/>
         </template>
       </var-cell>
     </var-space>
+  </var-col>
 
-  </var-space>
 </template>
 
 <script>
@@ -44,14 +48,26 @@ export default {
       spcList:[],
       cellList:[],
       productList:[],
+      text:{}
     }
   },
   async created(){
+    this.language()
     await this.getSpc()
     await this.getProduct()
     this.cellList = this.productList
+    global.currentRouter = 0
   },
   methods:{
+    language(){
+      this.text = global.currentLanguage
+      setInterval(()=>{
+        if (global.currentLanguage.language !== this.current_language){
+          this.current_language = global.currentLanguage.language
+          this.text = global.currentLanguage
+        }
+      },100)
+    },
     async getSpc(){
       let res = await this.$http({
         url:'spcs',
@@ -96,12 +112,12 @@ export default {
 
 <style scoped>
 .tabs-example-vertical {
-  width: 120% !important;
-  height: 200px !important;
+  width: 6% !important;
+  height: 25% !important;
+  position: fixed;
 }
 
 .cell{
-  width: 1100px;
+  width: 100%;
 }
-
 </style>

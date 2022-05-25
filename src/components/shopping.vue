@@ -1,45 +1,49 @@
 <template>
-  <var-snackbar v-model:show="show" type="warning"> 出厂标准线长为1m，其他长度需定制，预计发货周期可能需要延长！ </var-snackbar>
-  <var-space>
-
-    <var-sticky offset-top="100">
-      <var-space direction="column"  align="center">
-        <var-chip :round="false" :plain="true" type="warning" size="large">
-          交期:1周左右
-          <template #right>
-            <var-icon @mouseover="show=true" @mouseout="show=false" name="help-circle-outline" />
-          </template>
-        </var-chip>
-        <var-chip :round="false" :plain="true" type="warning" size="large">价格:{{allPrice}} $</var-chip>
-      </var-space>
-    </var-sticky>
-
+  <var-col span="18" offset="4">
     <var-space direction="column" size="large" class="cell">
+      <var-cell >
+        <template #default>
+          <var-space justify="end">
+            <var-chip :plain="true" type="warning" >
+              {{ text.shopping.aggregate.cycle }}
+              <template #right>
+                <var-icon @mouseover="show=true" @mouseout="show=false" name="help-circle-outline" />
+              </template>
+            </var-chip>
+            <var-chip :plain="true" type="warning" >{{ text.shopping.aggregate.total_price }}{{this.allPrice}} {{text.shopping.aggregate.sign}}</var-chip>
+          </var-space>
+        </template>
+      </var-cell>
       <var-cell v-for="(item,index) in list" :border="true">
         <template #default>
           <var-space justify="space-between">
             <var-image @click="preview(item.url)" fit="none" :src="item.url" />
-            <var-space >
-              <var-space  v-if="item.sid !== 2 && item.sid !== 4 ">
-                <var-image fit="none"  :src="item.coreIcon" />
-                <var-space direction="column" size="large" justify="center">
-                  <var-col  :offset="8"> <var-badge type="info" value="芯数" /> </var-col>
+            <var-space>
+              <var-space  v-if="item.sid !== 2 && item.sid !== 4" justify="end">
+                <var-col :offset="12">
+                  <var-space direction="column">
+                    <p></p>
+                    <var-image  width="60%" :ripple="true" fit="scale-down" :src="item.coreIcon" />
+                  </var-space>
+                </var-col>
+                <var-space direction="column" size="large" justify="end">
+                  <var-col  :offset="8"> <var-badge type="info" :value="text.shopping.counter_text.core" /> </var-col>
                   <var-counter lazy-change @increment="add(index,'core')" @decrement="cut(index,'core')" color="#28a7e1" min="2" max="8" v-model="item.core"/>
                 </var-space>
               </var-space>
               <var-space v-if="item.sid === 1 || item.sid === 5 ">
                 <var-space direction="column" size="large" justify="center">
-                  <var-col  :offset="8"> <var-badge type="info" value="长度" /> </var-col>
+                  <var-col  :offset="8"> <var-badge type="info" :value="text.shopping.counter_text.length" /> </var-col>
                   <var-counter lazy-change @increment="add(index,'length')" @decrement="cut(index,'length')" color="#28a7e1" min="1" v-model="item.length"/>
                 </var-space>
               </var-space>
 
               <var-space direction="column" size="large" justify="center">
-                <var-col :offset="8"> <var-badge type="info" value="数量" /> </var-col>
+                <var-col :offset="8"> <var-badge type="info" :value="text.shopping.counter_text.quantity" /> </var-col>
                 <var-counter lazy-change @increment="add(index,'quantity')" @decrement="cut(index,'quantity')" color="#28a7e1" min="1" v-model="item.quantity"/>
               </var-space>
               <var-space direction="column" size="large" justify="center">
-                <var-col :offset="7"> <var-badge type="info" value="价格" /> </var-col>
+                <var-col :offset="7"> <var-badge type="info" :value="text.shopping.counter_text.price" /> </var-col>
                 <var-chip type="info" :plain="true">{{ item.price }} $</var-chip>
               </var-space>
             </var-space>
@@ -47,21 +51,22 @@
         </template>
 
         <template #desc>
-          <p>{{item.name}}</p>
+          <p v-if="text.language === '中文'">{{item.name}}</p>
+          <p v-else-if="text.language === 'English'">{{item.en}}</p>
         </template>
         <template #extra>
           <var-icon  v-ripple="{ color: '#ee0707' }" color="#EE0707FF" @click="del(index)" name="close-circle-outline" :size="30"/>
         </template>
-      </var-cell>
+      </var-cell >
     </var-space>
-
-  </var-space>
-
+  </var-col>
+  <var-snackbar v-model:show="show" type="warning"> {{text.hint.delivery_prompt}} </var-snackbar>
 </template>
 
 <script>
 import {global} from "../global";
 import {ImagePreview, Snackbar} from "@varlet/ui";
+import {ref} from "vue";
 
 let svgUrl = 'https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/core/'
 
@@ -72,10 +77,12 @@ export default {
       list:[],
       coreList:[],
       allPrice:0,
-      show:false
+      show:false,
+      text:{}
     }
   },
   async created() {
+    this.language()
     let that = this
     let res = await this.$http({
       url:'cores',
@@ -97,8 +104,18 @@ export default {
       this.list.push(data)
       this.calculateAllPrice()
     })
+    global.currentRouter = 1
   },
   methods:{
+    language(){
+      this.text = global.currentLanguage
+      setInterval(()=>{
+        if (global.currentLanguage.language !== this.current_language){
+          this.current_language = global.currentLanguage.language
+          this.text = global.currentLanguage
+        }
+      },100)
+    },
     del(index){
       this.list = JSON.parse(JSON.stringify(this.list))
       this.list.splice(index,1)
@@ -184,6 +201,8 @@ export default {
       all = parseFloat(all).toFixed(2)
       this.allPrice = all
       global.list = this.list
+      ref(this.allPrice)
+      global.currentAllPrice = this.allPrice
     }
   }
 }
@@ -191,6 +210,6 @@ export default {
 
 <style scoped>
   .cell{
-    width: 1100px;
+    width: 100%;
   }
 </style>
