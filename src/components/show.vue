@@ -1,12 +1,13 @@
 <template>
-  <var-col span="2" offset="2">
+  <var-col span="2"
+  >
     <var-tabs
         class="tabs-example-vertical"
         elevation
         layout-direction="vertical"
         v-model:active="active"
     >
-      <var-space >
+      <var-space>
         <var-tab @click="showAll()" name="information">{{text.all_product}}</var-tab>
         <var-tab v-if="text.language === '中文'" @click="change(item)" v-for="(item,index) in spcList">{{item.name}}</var-tab>
         <var-tab v-else-if="text.language === 'English'" @click="change(item)" v-for="(item,index) in spcList">{{item.en}}</var-tab>
@@ -14,7 +15,7 @@
 
     </var-tabs>
   </var-col>
-  <var-col span="18">
+  <var-col span="20">
     <var-space direction="column" class="cell" justify="end">
       <var-cell v-for="(item,index) in cellList" :border="true" >
         <template #default>
@@ -113,7 +114,7 @@ export default {
 <style scoped>
 .tabs-example-vertical {
   width: 6% !important;
-  height: 25% !important;
+  height: 24% !important;
   position: fixed;
 }
 

@@ -70,7 +70,7 @@ export default {
     },
     theme_init(){
       let theme = localStorage.getItem('theme')
-      if (!theme){
+      if (theme){
         this.toggleTheme()
       }
     },

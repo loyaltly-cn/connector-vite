@@ -15,8 +15,8 @@ app.use(Varlet)
 
 app.mount('#app')
 
-const url = 'http://localhost:8006/'
-// const url = 'https://api.bj-jiuqi.com/connectorApi/'
+// const url = 'http://localhost:8006/'
+const url = 'https://rovmaker.loyaltly.cn/connectorApi/'
 
 app.config.globalProperties.$judgeRouter = (code) =>{
     let url = ''
@@ -39,21 +39,14 @@ app.config.globalProperties.$judgeRouter = (code) =>{
 
 
 app.config.globalProperties.$http = async (param) =>{
-    let obj = new URLSearchParams()
-    obj.append('data',JSON.stringify(param.data))
-    obj.append('timeStamp',new Date().getTime().toString())
     console.log(param.data)
     let res = await axios({
         url:url+param.url,
         method:param.method,
-        data:obj,
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        }
+        data:param.data
     })
     return res.data
 }
-
 
 app.config.globalProperties.$judgeIcon = (icon) =>{
     if (icon === 'plus-circle-outline'){

@@ -9,10 +9,14 @@ import Step from './components/step.vue'
   </var-sticky>
 
   <var-row>
-    <var-col span="20"  class="view">
+    <var-col class="view" span="22"
+              offset="1"
+             :xs="{offset:0}"
+    >
       <router-view/>
     </var-col>
-    <var-col span="4" class="step" >
+    <var-col class="step" span="2"
+            offset="21">
       <step/>
     </var-col>
   </var-row>
@@ -20,9 +24,7 @@ import Step from './components/step.vue'
 
 <style scoped>
   .step{
-    /*width: 100%;*/
     position: fixed;
-    margin-left: 77%;
     margin-top: 2%;
   }
   .view{

@@ -1,43 +1,40 @@
 <template>
 <!--  {{text.commit.alert}}-->
-  <var-col span="3" offset="9">
-    <var-card
-    :description="text.commit.alert"
-    :ripple="true"
-    />
-  </var-col>
-  <var-col offset="1">
-    <var-card class="card">
-      <template #description>
-        <var-space direction="column" justify="center" class="main">
-          <var-input @blur="emailFun()" :placeholder="text.commit.email" v-model="email" >
+  <var-col span="2"></var-col>
+  <var-col span="20" >
+    <var-col span="10">
+      <var-card
+          :description="text.commit.alert"
+          :ripple="true"/>
+    </var-col>
+    <var-col span="10">
+      <var-space direction="column" justify="center" class="main">
+        <var-input @blur="emailFun()" :placeholder="text.commit.email" v-model="email" >
+          <template #prepend-icon>
+            <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/email.png" />
+          </template>
+        </var-input>
+
+        <var-menu offset-x="-30" offset-y="50" alignment="top" v-model:show="show">
+          <var-input @blur="phoneFun()" type="number" :placeholder="text.commit.phone+'+'+currentCode" v-model="phone" >
             <template #prepend-icon>
-              <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/email.png" />
+              <var-image fit="contain" @click="show=true" :src="currentUrl" />
             </template>
           </var-input>
-
-          <var-menu offset-x="-30" offset-y="50" alignment="top" v-model:show="show">
-            <var-input @blur="phoneFun()" type="number" :placeholder="text.commit.phone+'+'+currentCode" v-model="phone" >
-              <template #prepend-icon>
-                <var-image fit="contain" @click="show=true" :src="currentUrl" />
-              </template>
-            </var-input>
-            <template #menu>
-              <var-space direction="column">
-                <var-cell  @click="selectCode(item)" v-for="(item,index) in codeList">
-                  <var-col>
-                    <var-image fit="contain"  @click="show=true" :src="item.url" />{{item.name}}+{{item.code}}
-                  </var-col>
-                </var-cell>
-              </var-space>
-            </template>
-          </var-menu>
-        </var-space>
-      </template>
-    </var-card>
+          <template #menu>
+            <var-space direction="column">
+              <var-cell  @click="selectCode(item)" v-for="(item,index) in codeList">
+                <var-col>
+                  <var-image fit="contain"  @click="show=true" :src="item.url" />{{item.name}}+{{item.code}}
+                </var-col>
+              </var-cell>
+            </var-space>
+          </template>
+        </var-menu>
+      </var-space>
+    </var-col>
   </var-col>
 
-<!--  <var-snackbar content="snack" v-model:show="snckShow" position="center" type="info" :duration="9999999999" >  </var-snackbar>-->
 </template>
 
 <script>
@@ -94,11 +91,7 @@ export default {
 
 <style scoped>
   .main{
-    margin-top: 5%;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-top: 10%;
   }
-  .card{
-    width: 15%;
-  }
+
 </style>

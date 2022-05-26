@@ -1,5 +1,5 @@
 <template>
-  <var-space direction="column">
+  <var-space direction="column" class="main">
     <var-steps :active="active" direction="vertical" @click-step="step">
       <var-step>{{ text.step.select }}</var-step>
       <var-step>{{ text.step.shopping }}</var-step>
@@ -81,28 +81,38 @@ export default {
         body.push(product)
       })
 
-      body.buyer = {
+      let buyer = {
         phone:'+'+global.code+global.phone,
         email:global.email
       }
 
+
+      let obj = new URLSearchParams()
+      obj.append('data',JSON.stringify(body))
+      obj.append('timeStamp',new Date().getTime().toString())
+      obj.append('phoneNumber','+'+global.code+global.phone)
+      obj.append('email',global.email)
+
       let res = await this.$http({
         url:'orders',
         method:'post',
-        data:body
+        data:obj
       })
 
-      // Email.send({
-      //   Host : "smtp.elasticemail.com",
-      //   Username : "loyaltly.cn@gmail.com",
-      //   Password : "9A464BB5FF70F00C31FC127936826B62A27F",
-      //   To : '1464808104@qq.com',
-      //   From : "loyaltly.cn@gmail.com",
-      //   Subject : "水密接插件订单",
-      //   Body : body
-      // }).then(
-      //     void this.over()
-      // );
+      if (res.code){
+        Email.send({
+          Host : "smtp.elasticemail.com",
+          Username : "loyaltly.cn@gmail.com",
+          Password : "9A464BB5FF70F00C31FC127936826B62A27F",
+          To : 'jimmy@rovmaker.org',
+          From : "loyaltly.cn@gmail.com",
+          Subject : "水密接插件订单",
+          Body : '客户邮箱:'+buyer.email+'  电话'+buyer.phone
+        }).then(
+            void this.over()
+        );
+      }
+
     },
     over(){
       this.active = 0
@@ -114,5 +124,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .main{
+    width: 100%;
+  }
 </style>
