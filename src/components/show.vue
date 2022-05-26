@@ -114,7 +114,7 @@ export default {
 <style scoped>
 .tabs-example-vertical {
   width: 6% !important;
-  height: 24% !important;
+  height: 23% !important;
   position: fixed;
 }
 

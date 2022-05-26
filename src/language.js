@@ -22,6 +22,7 @@ export const zn = {
         }
     },
     commit:{
+        name:'我们该如何称呼您',
         email:'请输入邮箱',
         phone:'请输入手机号',
         alert:'请您提供联系方式,稍后我们会联系您',
@@ -59,6 +60,7 @@ export const en = {
         }
     },
     commit:{
+        name:'How should we call you',
         email:'Press email address',
         phone:'Phone number',
         alert:'Just Leave out you email address , and we will contact you within 24 hours',

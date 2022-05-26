@@ -3,6 +3,7 @@ export let global = {
     code:null,
     phone:null,
     email:null,
+    name:null,
     currentLanguage:{},
     currentRouter:null
 }

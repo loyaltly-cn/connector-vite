@@ -70,6 +70,7 @@ export default {
     },
     theme_init(){
       let theme = localStorage.getItem('theme')
+      console.log(theme)
       if (theme){
         this.toggleTheme()
       }
@@ -83,13 +84,13 @@ export default {
         this.obj.color = '#ffffff'
         this.obj.textColor='#000000'
         this.obj.icon = 'white-balance-sunny'
-        localStorage.setItem('theme','theme')
+        localStorage.removeItem('theme')
       }else {
         this.currentTheme = dark
         this.obj.color = '#303030'
         this.obj.textColor='#ffffff'
         this.obj.icon = 'weather-night'
-        localStorage.removeItem('theme')
+        localStorage.setItem('theme','theme')
       }
       StyleProvider(this.currentTheme)
     },

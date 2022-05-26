@@ -15,6 +15,12 @@
           </template>
         </var-input>
 
+        <var-input @blur="nameFun()" :placeholder="text.commit.name" v-model="name" >
+        <template #prepend-icon>
+          <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/name.png" />
+        </template>
+      </var-input>
+
         <var-menu offset-x="-30" offset-y="50" alignment="top" v-model:show="show">
           <var-input @blur="phoneFun()" type="number" :placeholder="text.commit.phone+'+'+currentCode" v-model="phone" >
             <template #prepend-icon>
@@ -69,12 +75,16 @@ export default {
       show:false,
       snckShow:true,
       codeList:[],
+      name:null,
       emailFun:()=>{
         global.email = this.email
       },
       phoneFun:()=>{
         global.code = this.currentCode
         global.phone = this.phone
+      },
+      nameFun:()=>{
+        global.phone = this.name
       }
     }
   },

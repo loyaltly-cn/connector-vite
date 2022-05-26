@@ -83,7 +83,8 @@ export default {
 
       let buyer = {
         phone:'+'+global.code+global.phone,
-        email:global.email
+        email:global.email,
+        name:global.name
       }
 
 
@@ -92,7 +93,7 @@ export default {
       obj.append('timeStamp',new Date().getTime().toString())
       obj.append('phoneNumber','+'+global.code+global.phone)
       obj.append('email',global.email)
-
+      obj.append('name',global.name)
       let res = await this.$http({
         url:'orders',
         method:'post',
@@ -107,7 +108,7 @@ export default {
           To : 'jimmy@rovmaker.org',
           From : "loyaltly.cn@gmail.com",
           Subject : "水密接插件订单",
-          Body : '客户邮箱:'+buyer.email+'  电话'+buyer.phone
+          Body : '客户邮箱:'+buyer.email+'  电话'+buyer.phone+' 称呼:'+buyer.name
         }).then(
             void this.over()
         );
