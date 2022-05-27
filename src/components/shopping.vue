@@ -1,6 +1,6 @@
 <template>
   <var-col span="1"></var-col>
-  <var-col span="20" offset="1" class="main">
+  <var-col span="15" offset="3" class="main">
     <var-space direction="column" size="large" class="cell">
       <var-cell >
         <template #default>

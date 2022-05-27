@@ -1,44 +1,42 @@
 <template>
-<!--  {{text.commit.alert}}-->
-  <var-col span="2"></var-col>
-  <var-col span="20" >
-    <var-col span="10">
-      <var-card
-          :description="text.commit.alert"
-          :ripple="true"/>
-    </var-col>
-    <var-col span="10">
-      <var-space direction="column" justify="center" class="main">
-        <var-input @blur="emailFun()" :placeholder="text.commit.email" v-model="email" >
-          <template #prepend-icon>
-            <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/email.png" />
-          </template>
-        </var-input>
 
-        <var-input @blur="nameFun()" :placeholder="text.commit.name" v-model="name" >
+  <var-col span="2"></var-col>
+
+  <var-col span="15" offset="2" >
+
+    <var-space align="center" direction="column" class="main">
+      <p>{{text.commit.alert}}</p>
+
+      <var-input @blur="nameFun()" :placeholder="text.commit.name" v-model="name" >
         <template #prepend-icon>
           <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/name.png" />
         </template>
       </var-input>
 
-        <var-menu offset-x="-30" offset-y="50" alignment="top" v-model:show="show">
-          <var-input @blur="phoneFun()" type="number" :placeholder="text.commit.phone+'+'+currentCode" v-model="phone" >
-            <template #prepend-icon>
-              <var-image fit="contain" @click="show=true" :src="currentUrl" />
-            </template>
-          </var-input>
-          <template #menu>
-            <var-space direction="column">
-              <var-cell  @click="selectCode(item)" v-for="(item,index) in codeList">
-                <var-col>
-                  <var-image fit="contain"  @click="show=true" :src="item.url" />{{item.name}}+{{item.code}}
-                </var-col>
-              </var-cell>
-            </var-space>
+      <var-input @blur="emailFun()" :placeholder="text.commit.email" v-model="email" >
+        <template #prepend-icon>
+          <var-icon name="https://rovmaker.oss-cn-shanghai.aliyuncs.com/connector/img/email.png" />
+        </template>
+      </var-input>
+
+      <var-menu offset-x="-30" offset-y="50" alignment="top" v-model:show="show">
+        <var-input @blur="phoneFun()" type="number" :placeholder="text.commit.phone+'+'+currentCode" v-model="phone" >
+          <template #prepend-icon>
+            <var-image fit="contain" @click="show=true" :src="currentUrl" />
           </template>
-        </var-menu>
-      </var-space>
-    </var-col>
+        </var-input>
+        <template #menu>
+          <var-space direction="column">
+            <var-cell  @click="selectCode(item)" v-for="(item,index) in codeList">
+              <var-col>
+                <var-image fit="contain"  @click="show=true" :src="item.url" />{{item.name}}+{{item.code}}
+              </var-col>
+            </var-cell>
+          </var-space>
+        </template>
+      </var-menu>
+
+    </var-space>
   </var-col>
 
 </template>
@@ -47,6 +45,8 @@
 import {global} from "../global";
 import {list} from "../code"
 import {Snackbar} from "@varlet/ui";
+import '@varlet/ui/es/styles/elevation.css'
+
 Snackbar.allowMultiple(true)
 export default {
   name: "commit",
@@ -84,7 +84,7 @@ export default {
         global.phone = this.phone
       },
       nameFun:()=>{
-        global.phone = this.name
+        global.name = this.name
       }
     }
   },
@@ -101,7 +101,12 @@ export default {
 
 <style scoped>
   .main{
-    margin-top: 10%;
+    margin-top: 1%;
+    border:1px solid #c8c8c8;
+    width: 100%;
+    height: 110%;
+    -webkit-box-shadow:0px 3px 3px #c8c8c8 ;
+    -moz-box-shadow:0px 3px 3px #c8c8c8 ;
+    box-shadow:0px 3px 3px #c8c8c8 ;
   }
-
 </style>

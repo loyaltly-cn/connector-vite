@@ -60,8 +60,8 @@ export const en = {
         }
     },
     commit:{
-        name:'How should we call you',
-        email:'Press email address',
+        name:'name',
+        email:'email',
         phone:'Phone number',
         alert:'Just Leave out you email address , and we will contact you within 24 hours',
         over:'Succcessfully!'

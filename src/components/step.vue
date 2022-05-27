@@ -70,16 +70,6 @@ export default {
       }
     },
     async commit(){
-      let body = []
-      global.list.forEach((data)=>{
-        let product = {
-          name:data.name,
-          core:data.core,
-          length:data.length,
-          quantity:data.quantity
-        }
-        body.push(product)
-      })
 
       let buyer = {
         phone:'+'+global.code+global.phone,
@@ -89,8 +79,9 @@ export default {
 
 
       let obj = new URLSearchParams()
-      obj.append('data',JSON.stringify(body))
-      obj.append('timeStamp',new Date().getTime().toString())
+      let timeStamp = new Date().getTime().toString()
+      obj.append('data',JSON.stringify(global.list))
+      obj.append('timeStamp',timeStamp)
       obj.append('phoneNumber','+'+global.code+global.phone)
       obj.append('email',global.email)
       obj.append('name',global.name)
@@ -106,9 +97,10 @@ export default {
           Username : "loyaltly.cn@gmail.com",
           Password : "9A464BB5FF70F00C31FC127936826B62A27F",
           To : 'jimmy@rovmaker.org',
+          // To : '1464808104@qq.com',
           From : "loyaltly.cn@gmail.com",
           Subject : "水密接插件订单",
-          Body : '客户邮箱:'+buyer.email+'  电话'+buyer.phone+' 称呼:'+buyer.name
+          Body : '客户邮箱:'+buyer.email+'  电话'+buyer.phone+' 称呼:'+buyer.name+'订单号'+timeStamp
         }).then(
             void this.over()
         );

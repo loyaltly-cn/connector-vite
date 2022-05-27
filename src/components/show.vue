@@ -1,21 +1,23 @@
 <template>
   <var-col span="2"
-  >
+           :xs="{offset:0}"
+           :sm="{offset:1}"
+           :md="{offset:1}"
+           :lg="{offset:2}"
+           :xl="{offset:2}"
+      >
     <var-tabs
-        class="tabs-example-vertical"
-        elevation
+        style="position: fixed; height: 30%;;"
+        :elevation="true"
         layout-direction="vertical"
         v-model:active="active"
     >
-      <var-space>
-        <var-tab @click="showAll()" name="information">{{text.all_product}}</var-tab>
-        <var-tab v-if="text.language === '中文'" @click="change(item)" v-for="(item,index) in spcList">{{item.name}}</var-tab>
-        <var-tab v-else-if="text.language === 'English'" @click="change(item)" v-for="(item,index) in spcList">{{item.en}}</var-tab>
-      </var-space>
-
+      <var-tab @click="showAll()">{{text.all_product}}</var-tab>
+      <var-tab v-if="text.language === '中文'" @click="change(item)" v-for="(item,index) in spcList" >{{item.name}}</var-tab>
+      <var-tab v-else-if="text.language === 'English'" @click="change(item)" v-for="(item,index) in spcList">{{item.en}}</var-tab>
     </var-tabs>
   </var-col>
-  <var-col span="20">
+  <var-col span="15">
     <var-space direction="column" class="cell" justify="end">
       <var-cell v-for="(item,index) in cellList" :border="true" >
         <template #default>
@@ -112,11 +114,6 @@ export default {
 </script>
 
 <style scoped>
-.tabs-example-vertical {
-  width: 6% !important;
-  height: 23% !important;
-  position: fixed;
-}
 
 .cell{
   width: 100%;

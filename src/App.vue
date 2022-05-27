@@ -16,7 +16,7 @@ import Step from './components/step.vue'
       <router-view/>
     </var-col>
     <var-col class="step" span="2"
-            offset="21">
+            offset="19">
       <step/>
     </var-col>
   </var-row>
