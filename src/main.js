@@ -39,7 +39,6 @@ app.config.globalProperties.$judgeRouter = (code) =>{
 
 
 app.config.globalProperties.$http = async (param) =>{
-    console.log(param.data)
     let res = await axios({
         url:url+param.url,
         method:param.method,

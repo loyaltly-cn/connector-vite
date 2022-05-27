@@ -51,6 +51,9 @@ Snackbar.allowMultiple(true)
 export default {
   name: "commit",
   created() {
+    if (!global.list.length){
+      this.$router.push('/show')
+    }
     // global.list.forEach((data)=>{
     //   console.log(data)
     // })

@@ -83,6 +83,9 @@ export default {
     }
   },
   async created() {
+    if (!global.list.length){
+      this.$router.push('/show')
+    }
     this.language()
     let that = this
     let res = await this.$http({
@@ -106,6 +109,11 @@ export default {
       this.calculateAllPrice()
     })
     global.currentRouter = 1
+  },
+  mounted() {
+    window.onbeforeunload = (e)=>{
+      e.returnValue = 'back'
+    }
   },
   methods:{
     language(){
